@@ -26,6 +26,7 @@ const articleSchema = {
 //creat our article model using mongoose
 const Article = mongoose.model("Article", articleSchema);
 
+//////////////////////////////Requests Targetting all Articles/////////////////////////////////////////////
 app.route("/articles")
   //create our get route that fetches all of the articles
   .get(function(req, res) {
@@ -67,6 +68,22 @@ app.route("/articles")
       }
     });
   });
+
+//////////////////////////////Requests Targetting A Specific Article/////////////////////////////////////////////
+
+app.route("/articles/:articleTitle")
+
+.get(function(req, res){
+  //The search condition
+  Article.findOne({title: req.params.articleTitle},function(err, foundArticle){
+    if (foundArticle) {
+      //send the article back to the client
+      res.send(foundArticle);
+    } else {
+      res.send("No articles matching that title was found");
+    }
+  });
+});
 
 //set up our app to listen on port 3000
 app.listen(3000, function() {
