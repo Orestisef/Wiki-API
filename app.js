@@ -58,7 +58,7 @@ app.route("/articles")
       }
     });
   })
-  //create our delete route that fetches all of the articles
+  //create our delete route that delete all of the articles
   .delete(function(req, res) {
     Article.deleteMany(function(err) {
       if (!err) {
@@ -72,18 +72,43 @@ app.route("/articles")
 //////////////////////////////Requests Targetting A Specific Article/////////////////////////////////////////////
 
 app.route("/articles/:articleTitle")
-
-.get(function(req, res){
-  //The search condition
-  Article.findOne({title: req.params.articleTitle},function(err, foundArticle){
-    if (foundArticle) {
-      //send the article back to the client
-      res.send(foundArticle);
-    } else {
-      res.send("No articles matching that title was found");
-    }
+  //create our get route that fetches a Specific article
+  .get(function(req, res) {
+    //The search condition
+    Article.findOne({
+      title: req.params.articleTitle
+    }, function(err, foundArticle) {
+      if (foundArticle) {
+        //send the article back to the client
+        res.send(foundArticle);
+      } else {
+        res.send("No articles matching that title was found");
+      }
+    });
+  })
+  //create our put route that replace a particular document inside our articles collection
+  .put(function(req, res) {
+    Article.update(
+      //The search condition
+      {
+        title: req.params.articleTitle
+      },
+      //What will update
+      {
+        title: req.body.title,
+        content: req.body.content
+      },
+      //overwrite everything with the values that the client provides
+      {
+        overwrite: true
+      },
+      function(err) {
+        if (!err) {
+          res.send("Successfully updated article.");
+        }
+      }
+    );
   });
-});
 
 //set up our app to listen on port 3000
 app.listen(3000, function() {
