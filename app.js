@@ -58,6 +58,16 @@ app.post("/articles", function(req, res) {
   });
 });
 
+//create our delete route that fetches all of the articles
+app.delete("/articles", function(req,res){
+  Article.deleteMany(function(err){
+    if(!err){
+      res.send("Successfully deleted all articles.")
+    }else{
+      res.send(err);
+    }
+  });
+});
 
 //set up our app to listen on port 3000
 app.listen(3000, function() {
