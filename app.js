@@ -1,4 +1,3 @@
-
 //create constants for requiring the modules
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -26,6 +25,21 @@ const articleSchema = {
 };
 //creat our article model using mongoose
 const Article = mongoose.model("Article", articleSchema);
+
+//create our get route that fetches all of the articles
+app.get("/articles", function(req, res) {
+  //query the db and find all the articles
+  Article.find(function(err, foundArticles) {
+    //if condition for errors
+    if (!err) {
+      //send the articles back to the client
+      res.send(foundArticles);
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 //set up our app to listen on port 3000
 app.listen(3000, function() {
   console.log("Server started on port 3000");
