@@ -26,48 +26,47 @@ const articleSchema = {
 //creat our article model using mongoose
 const Article = mongoose.model("Article", articleSchema);
 
-//create our get route that fetches all of the articles
-app.get("/articles", function(req, res) {
-  //query the db and find all the articles
-  Article.find(function(err, foundArticles) {
-    //if condition for errors
-    if (!err) {
-      //send the articles back to the client
-      res.send(foundArticles);
-    } else {
-      res.send(err);
-    }
+app.route("/articles")
+  //create our get route that fetches all of the articles
+  .get(function(req, res) {
+    //query the db and find all the articles
+    Article.find(function(err, foundArticles) {
+      //if condition for errors
+      if (!err) {
+        //send the articles back to the client
+        res.send(foundArticles);
+      } else {
+        res.send(err);
+      }
+    });
+  })
+  //create our post route that fetches all of the articles
+  .post(function(req, res) {
+    //grab some data that was sent through with req.body.title and req.body.content and
+    //create a new constant to store a new article
+    const newArticle = new Article({
+      //define the data for the two fields
+      title: req.body.title,
+      content: req.body.content
+    });
+    newArticle.save(function(err) {
+      if (!err) {
+        res.send("Successfully added a new article.")
+      } else {
+        res.send(err);
+      }
+    });
+  })
+  //create our delete route that fetches all of the articles
+  .delete(function(req, res) {
+    Article.deleteMany(function(err) {
+      if (!err) {
+        res.send("Successfully deleted all articles.")
+      } else {
+        res.send(err);
+      }
+    });
   });
-});
-
-//create our post route that fetches all of the articles
-app.post("/articles", function(req, res) {
-  //grab some data that was sent through with req.body.title and req.body.content and
-  //create a new constant to store a new article
-  const newArticle = new Article({
-    //define the data for the two fields
-    title: req.body.title,
-    content: req.body.content
-  });
-  newArticle.save(function(err){
-    if (!err){
-      res.send("Successfully added a new article.")
-    } else {
-      res.send(err);
-    }
-  });
-});
-
-//create our delete route that fetches all of the articles
-app.delete("/articles", function(req,res){
-  Article.deleteMany(function(err){
-    if(!err){
-      res.send("Successfully deleted all articles.")
-    }else{
-      res.send(err);
-    }
-  });
-});
 
 //set up our app to listen on port 3000
 app.listen(3000, function() {
