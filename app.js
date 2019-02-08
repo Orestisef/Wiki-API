@@ -111,18 +111,34 @@ app.route("/articles/:articleTitle")
   })
   //update a particular document in our article collection but we only update the field that we provide
   .patch(function(req, res) {
-    Article.update(
-      {title: req.params.articleTitle},
-      {$set: req.body},
-      function(err){
-        if(!err){
+    Article.update({
+        title: req.params.articleTitle
+      }, {
+        $set: req.body
+      },
+      function(err) {
+        if (!err) {
           res.send("Successfully updated article.")
-        }else{
+        } else {
           res.send(err);
         }
       }
     );
-  });
+  })
+//create our put route that replace a particular document
+.delete(function(req, res) {
+  Article.deleteOne({
+      title: req.params.articleTitle
+    },
+    function(err) {
+      if (!err) {
+        res.send("Successfully deleted the corresponding article.")
+      } else {
+        res.send(err);
+      }
+    }
+  );
+});
 
 //set up our app to listen on port 3000
 app.listen(3000, function() {
