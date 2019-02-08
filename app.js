@@ -108,6 +108,20 @@ app.route("/articles/:articleTitle")
         }
       }
     );
+  })
+  //update a particular document in our article collection but we only update the field that we provide
+  .patch(function(req, res) {
+    Article.update(
+      {title: req.params.articleTitle},
+      {$set: req.body},
+      function(err){
+        if(!err){
+          res.send("Successfully updated article.")
+        }else{
+          res.send(err);
+        }
+      }
+    );
   });
 
 //set up our app to listen on port 3000
